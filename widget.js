@@ -254,6 +254,7 @@ function renderRecommendation(){
       <div class="hh-rec-tier-label"><span class="hh-tier-dot ${tier.color}"></span>Your Recommended Tier</div>
       <div class="hh-rec-tier-name">${tier.name}</div>
       <div class="hh-rec-price">Starting at <strong>${tier.startingAt}</strong>/hr</div>
+      <div class="hh-rec-price-note">Based on a 4–8 hour shift (minimum)</div>
       <div class="hh-rec-tier-desc">${tier.description}</div>
       <ul class="hh-rec-features">${feats}</ul>
       <div class="hh-rec-disclaimer">* Transportation mileage is not included in the hourly rate. Mileage is billed separately at the current standard rate.</div>
