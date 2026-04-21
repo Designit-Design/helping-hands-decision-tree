@@ -21,19 +21,19 @@ const ZIPS={"90016":"LA County","90019":"LA County","90035":"LA County","90045":
 // ============================================================
 const TIERS={
   essential:{
-    name:"Essential Care",color:"green",
+    name:"Essential Care",color:"green",startingAt:"$32",
     image:"https://cdn.prod.website-files.com/69cc36e2bebac08fced90835/69e11167375e664aea56e8ba_Companionship%201.webp",
     description:"Daily living basics — companionship, meals, light housekeeping, and routine support to help your loved one stay comfortable at home.",
     features:["Companionship & conversation","Meal preparation & hydration reminders","Light housekeeping & laundry","Medication reminders","Errands and grocery shopping"]
   },
   personal:{
-    name:"Personal Care",color:"blue",
+    name:"Personal Care",color:"blue",startingAt:"$37",
     image:"https://cdn.prod.website-files.com/69cc36e2bebac08fced90835/69e1122015878d13155a5209_Personal%20Care%20Hero.webp",
     description:"Hands-on ADL support — bathing, dressing, mobility assistance, plus everything in Essential Care.",
     features:["Everything in Essential Care","Bathing & personal hygiene","Dressing & grooming","Mobility & transfer support","Toileting assistance"]
   },
   advanced:{
-    name:"Advanced Care",color:"purple",
+    name:"Advanced Care",color:"purple",startingAt:"$43",
     image:"https://cdn.prod.website-files.com/69cc36e2bebac08fced90835/69e1125ee4bcf925ccaba7df_Mobiltiy%20Image%202.webp",
     description:"Specialized support for complex needs — dementia care, fall prevention, post-surgery recovery, and chronic condition support.",
     features:["Everything in Personal Care","Dementia & Alzheimer's support","Fall prevention & safety protocols","Post-surgery & hospital recovery","Close supervision & specialized care"]
@@ -53,7 +53,8 @@ const answers={
   frequency:null, timeofday:[],
   'needs-everyday':[],'needs-handson':[],'needs-advanced':[],
   tier:'',
-  careFor:'', gender:'', age:'', phone:'', lastName:'', notes:''
+  careFor:'', gender:'', age:'', phone:'', lastName:'', notes:'',
+  birthday:'', address:'', city:'', state:'California'
 };
 
 const root=document.getElementById('hh-tree');
@@ -207,7 +208,8 @@ function bindStep9(){
   });
   const fields={
     'hh-lastname':'lastName','hh-phone2':'phone',
-    'hh-gender':'gender','hh-age':'age','hh-notes':'notes'
+    'hh-gender':'gender','hh-age':'age','hh-notes':'notes',
+    'hh-birthday':'birthday','hh-addr':'address','hh-city':'city','hh-state':'state'
   };
   Object.keys(fields).forEach(id=>{
     const el=$('#'+id);
@@ -251,8 +253,10 @@ function renderRecommendation(){
     <div class="hh-rec-body">
       <div class="hh-rec-tier-label"><span class="hh-tier-dot ${tier.color}"></span>Your Recommended Tier</div>
       <div class="hh-rec-tier-name">${tier.name}</div>
+      <div class="hh-rec-price">Starting at <strong>${tier.startingAt}</strong>/hr</div>
       <div class="hh-rec-tier-desc">${tier.description}</div>
       <ul class="hh-rec-features">${feats}</ul>
+      <div class="hh-rec-disclaimer">* Transportation mileage is not included in the hourly rate. Mileage is billed separately at the current standard rate.</div>
     </div>`;
 }
 
@@ -312,8 +316,12 @@ async function submitForm(){
     'Care For':answers.careFor||'Not specified',
     'Gender':answers.gender||'Not specified',
     'Age':answers.age||'Not specified',
+    'Birthday':answers.birthday||'Not provided',
 
-    '── LOCATION ──':'',
+    '── CARE LOCATION ──':'',
+    'Street Address':answers.address||'Not provided',
+    'City':answers.city||'Not provided',
+    'State':answers.state||'Not provided',
     'ZIP Code':answers.zip,
     'Service Area':answers.county,
 
@@ -338,7 +346,9 @@ async function submitForm(){
         zip:answers.zip,county:answers.county,
         recipient:answers.recipient,urgency:answers.urgency,frequency:answers.frequency,
         timeOfDay:(answers.timeofday||[]).join(', '),careNeeds:allNeeds.join(', '),
-        tier:tierName,careFor:answers.careFor,gender:answers.gender,age:answers.age,notes:answers.notes,
+        tier:tierName,careFor:answers.careFor,gender:answers.gender,age:answers.age,
+        birthday:answers.birthday,address:answers.address,city:answers.city,state:answers.state,
+        notes:answers.notes,
         status:'Complete',timestamp:new Date().toLocaleString()
       })});
     }catch(e){}
