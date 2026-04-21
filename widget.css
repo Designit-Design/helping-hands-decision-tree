@@ -135,8 +135,11 @@ textarea.hh-form-field{resize:vertical;min-height:80px}
 .hh-rec-card.green{background:var(--green-bg);border-color:var(--green-border)}
 .hh-rec-card.blue{background:var(--blue-bg);border-color:var(--blue-border)}
 .hh-rec-card.purple{background:var(--purple-bg);border-color:var(--purple-border)}
-.hh-rec-img{width:100%;height:200px;object-fit:cover;display:block}
+.hh-rec-img{width:100%;height:220px;object-fit:contain;display:block;background:var(--white);border-bottom:1px solid var(--border-light)}
 .hh-rec-body{padding:24px}
+.hh-rec-price{font-size:22px;color:var(--text);margin-bottom:14px}
+.hh-rec-price strong{font-size:28px;font-weight:800}
+.hh-rec-disclaimer{font-size:11px;color:var(--text-muted);margin-top:16px;line-height:1.5;font-style:italic}
 .hh-rec-tier-label{display:inline-flex;align-items:center;gap:8px;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;margin-bottom:10px}
 .hh-rec-card.green .hh-rec-tier-label{color:var(--green-text)}
 .hh-rec-card.blue .hh-rec-tier-label{color:var(--blue-text)}
@@ -197,7 +200,7 @@ textarea.hh-form-field{resize:vertical;min-height:80px}
   .hh-exit-btn{flex:1;justify-content:center}
   .hh-btn-next{padding:12px 22px}
   .hh-rec-tier-name{font-size:24px}
-  .hh-rec-img{height:160px}
+  .hh-rec-img{height:180px}
   .hh-result-h{font-size:22px}
   .hh-prog-dot{width:22px}
 }
