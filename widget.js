@@ -47,6 +47,7 @@ const TOTAL_STEPS=10;
 const STEP_LABELS=['Recipient','Timing','Your Info','Location','Frequency','Time of Day','Care Needs','Recommendation','Details','Complete'];
 let currentStep=1;
 let partialSent=false;
+let partialEmailSent=false;
 const answers={
   recipient:null, urgency:null, firstName:'', email:'',
   zip:'', county:'',
@@ -288,6 +289,34 @@ function sendPartialToSheets(){
 }
 
 // ============================================================
+// WEB3FORMS — partial capture (emails Chase immediately)
+// ============================================================
+function sendPartialEmail(){
+  if(partialEmailSent||!WEB3FORMS_KEY)return;
+  partialEmailSent=true;
+  const payload={
+    access_key:WEB3FORMS_KEY,
+    subject:`\u{1F7E1} PARTIAL Care Inquiry: ${answers.firstName||'Someone'} (not completed yet)`,
+    from_name:'Helping Hands Care Quiz',
+    'Note':'This visitor reached the contact step but has not finished the quiz. You may want to reach out soon while they are still looking for care.',
+    '\u2500\u2500 CONTACT INFO \u2500\u2500':'',
+    'First Name':answers.firstName||'Not provided',
+    'Email':answers.email||'Not provided',
+    '\u2500\u2500 ANSWERS SO FAR \u2500\u2500':'',
+    'Care For':answers.recipient||'Not yet answered',
+    'Urgency':answers.urgency||'Not yet answered',
+    'Status':'PARTIAL: stopped before completing',
+    'Time':new Date().toLocaleString()
+  };
+  try{
+    fetch('https://api.web3forms.com/submit',{
+      method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},
+      body:JSON.stringify(payload)
+    });
+  }catch(e){console.warn('Partial email send failed',e)}
+}
+
+// ============================================================
 // WEB3FORMS — complete submission (email to Chase)
 // ============================================================
 async function submitForm(){
@@ -314,7 +343,7 @@ async function submitForm(){
     'Phone':answers.phone,
 
     '── CARE RECIPIENT ──':'',
-    'Care For':answers.careFor||'Not specified',
+    'Care For':answers.recipient||answers.careFor||'Not specified',
     'Gender':answers.gender||'Not specified',
     'Age':answers.age||'Not specified',
     'Birthday':answers.birthday||'Not provided',
@@ -419,7 +448,7 @@ root.addEventListener('click',e=>{
   if(action==='next'){
     if(!isStepValid(currentStep))return;
     // Fire partial capture after step 3 (email collected)
-    if(currentStep===3&&!partialSent)sendPartialToSheets();
+    if(currentStep===3){sendPartialEmail();sendPartialToSheets();}
     // Render recommendation before showing step 8
     if(currentStep===7)renderRecommendation();
     // Bind step 9 fields when entering step 9
